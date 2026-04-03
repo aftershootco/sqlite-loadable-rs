@@ -609,7 +609,13 @@ pub unsafe fn sqlite3ext_mprintf(s: *const c_char) -> *mut c_char {
 }
 
 #[cfg(feature = "static")]
-pub unsafe fn sqlite3ext_auto_extension(f: unsafe extern "C" fn()) -> i32 {
+pub unsafe fn sqlite3ext_auto_extension(
+    f: unsafe extern "C" fn(
+        *mut libsqlite3_sys::sqlite3,
+        *mut *const i8,
+        *const libsqlite3_sys::sqlite3_api_routines,
+    ) -> i32,
+) -> i32 {
     libsqlite3_sys::sqlite3_auto_extension(Some(f))
 }
 #[cfg(not(feature = "static"))]

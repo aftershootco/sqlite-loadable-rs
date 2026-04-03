@@ -11,7 +11,7 @@ use std::ptr;
 use std::slice;
 use std::str::Utf8Error;
 
-use crate::api::{mprintf, value_type, MprintfError, ValueType};
+use crate::api::{MprintfError, ValueType, mprintf, value_type};
 use crate::errors::{Error, ErrorKind, Result};
 use crate::ext::{
     sqlite3, sqlite3_context, sqlite3_index_info, sqlite3_index_info_sqlite3_index_constraint,
@@ -166,7 +166,7 @@ impl IndexInfo {
                 return match err {
                     MprintfError::Oom => Err(Error::new_message("OOM todo change to code?")),
                     MprintfError::Nul(err) => Err(err.into()),
-                }
+                };
             }
         };
         unsafe {
@@ -348,6 +348,7 @@ pub fn define_table_function<'vtab, T: VTab<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -404,6 +405,7 @@ pub fn define_table_function_with_find<'vtab, T: VTabFind<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -470,6 +472,7 @@ pub fn define_virtual_table<'vtab, T: VTab<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -524,6 +527,7 @@ pub fn define_virtual_table_with_find<'vtab, T: VTabFind<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -580,6 +584,7 @@ pub fn define_virtual_table_writeable<'vtab, T: VTabWriteable<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -640,6 +645,7 @@ pub fn define_virtual_table_writeable_with_transactions<
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
@@ -697,6 +703,7 @@ pub fn define_virtual_table_writeablex<'vtab, T: VTabWriteable<'vtab> + 'vtab>(
             xRelease: None,
             xRollbackTo: None,
             xShadowName: None,
+            xIntegrity: None,
         },
         phantom: PhantomData::<&'vtab T>,
     };
